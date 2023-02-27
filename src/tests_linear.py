@@ -43,9 +43,9 @@ def main():
             # Check if the computed cost matches the expected cost 
             if cost != expected_cost:
                 print(f"Test {test_num+1} failed: expected cost {expected_cost}, got {cost}")
-            # Check if the optimal alignment obtained matches the one of the expected
 
             # Check if the computed alignments match the expected alignments
+            # in results we will accumulate the comparisons -> one should be as the one we compute
             results = []
             if num_alignments > 0:
                 for alig in range(0,num_alignments):

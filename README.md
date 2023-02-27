@@ -3,9 +3,13 @@ To execute locally:
 run the file src/global_alignment.py for an interactive program
 
 for a non-interactive program, run the file src/global_alignment_command.py with the following arguments:
+
     - for linear alignment:
+
     python3 global_alignment_command.py l seq1.fasta seq2.fasta subst_matrix.txt output_file.fasta
+
     - for affine cost alignment: 
+    
     python3 global_alignment_command.py a seq1.fasta seq2.fasta subst_matrix.txt output_file.fasta
 
 

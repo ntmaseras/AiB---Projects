@@ -4,7 +4,7 @@ from alignment import global_alignment_affine
 import os
 
 def affine_alignment_int():
-    
+    ## interactive function for affine alignment
     while True:
         # Prompt the user for input
         print("Enter the first sequence (or path to a fasta file):")
