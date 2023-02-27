@@ -1,3 +1,3 @@
 To execute locally:
 
-run the file global_alignment.py
+run the file src/global_alignment.py
