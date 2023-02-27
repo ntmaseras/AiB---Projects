@@ -1,6 +1,6 @@
 import sys
 from parsing import parse_matrix_and_gap
-from alignment import global_alignment_linear
+from alignment import global_alignment_affine
 
 
 def compare_alignments(align1, align2, ref1, ref2):
@@ -13,8 +13,13 @@ def compare_alignments(align1, align2, ref1, ref2):
 
 
 def main():    
-    ## python3 tests.py data/subst_matrix_l.txt data/tests.txt
-    substitution_matrix, gap_cost = parse_matrix_and_gap(sys.argv[1])
+    ## python3 tests_affine.py src/input/subst_matrix_affine.txt src/tests/tests_aff.txt
+    substitution_matrix, gaps = parse_matrix_and_gap(sys.argv[1])
+    alpha = gaps[0]
+    beta = gaps[1]
+    
+    a = sys.argv
+    
     # Open the testing file for reading
     with open(sys.argv[2],'r') as f:
         #lines = f.readlines()
@@ -37,8 +42,8 @@ def main():
             num_alignments = int(f.readline().strip())
 
             # Call the global_alignment function with the input sequences and parameters
-            if test_type == 'linear':
-                cost,align1,align2 = global_alignment_linear(seq1.upper(), seq2.upper(), gap_cost, substitution_matrix,'out.txt')
+            if test_type == 'affine':
+                cost,align1,align2 = global_alignment_affine(seq1.upper(), seq2.upper(), alpha,beta, substitution_matrix,'out.txt')
             #elif test_type == 'affine':
             #    cost, alignments = global_alignment(seq1, seq2, affine_gap_penalty_open, affine_gap_penalty_ext, subst_matrix)
 
@@ -58,9 +63,8 @@ def main():
                 if True not in results:
                     print(f"Test '{test_num+1}' failed: not the expected optimal alignment (check for issues tracing back)")
                 
-            print("Test '{test_num+1}' passed")
+            print(f"Test '{test_num+1}' passed")
                 
-
         # If all checks pass, print a success message
         print("Tests passed")
 

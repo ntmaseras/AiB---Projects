@@ -33,7 +33,7 @@ def linear_alignment_int():
         while True:
             answer = input().strip().lower()
             if answer == 'y':
-                matrix_path = 'input/subst_matrix_linear.txt'
+                matrix_path = 'src/input/subst_matrix_linear.txt'
                 break
             elif answer == 'n':
                 print("Enter the path to the substitution matrix and gap penalty file:")
