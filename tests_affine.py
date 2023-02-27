@@ -18,6 +18,8 @@ def main():
     alpha = gaps[0]
     beta = gaps[1]
     
+    a = sys.argv
+    
     # Open the testing file for reading
     with open(sys.argv[2],'r') as f:
         #lines = f.readlines()

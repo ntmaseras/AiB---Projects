@@ -1,4 +1,4 @@
 >seq1_aligned
-ACGTGTCAACGT
+TCCAGAGA
 >seq2_aligned
-ACGTCGTAGCTA
+TC---GAT
