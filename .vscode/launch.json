@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+       {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            //"args": ["seq1.fasta", "seq2.fasta", "subst_matrix_a.txt","1"],
+            "args": ["AATAAT", "AAGG", "subst_matrix_a.txt","out.txt"],
+            //"args": ["subst_matrix_a.txt","tests_aff.txt"],
+            "justMyCode": true
+        }
+    ]
+}
