@@ -1,4 +1,0 @@
->seq1_aligned
-TCCAGAGA
->seq2_aligned
-TC---GAT

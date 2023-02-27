@@ -1,4 +1,0 @@
->seq1_aligned
-ACGTGTCAACGT
->seq2_aligned
-ACGTCGTAGCTA
