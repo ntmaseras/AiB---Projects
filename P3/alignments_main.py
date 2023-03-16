@@ -5,16 +5,11 @@ import os
 
 def read_sequences_and_subst_matrix():    
     # Prompt the user for input
-    while True:
-        print("How many sequences will you input?")
-        num_seq = int(input().strip())
-        if num_seq < 2:
-            print("Insert 3 or more sequences")
-        break
-    i = 0
+    
+    i = 1
     list_seq = []
     
-    while i<num_seq:
+    while i<4:
         print("Enter the sequence ",i," (or path to a fasta file):")
         arg1 = input().strip()
         if 'fasta' in arg1:
@@ -64,11 +59,12 @@ def main():
     list_of_seqs,substitution_matrix = read_sequences_and_subst_matrix()
     
     if type_alig.lower() == 'e':
-        print(multiple_alignment(list_of_seqs, substitution_matrix, aprox = False,alignment=True))
+        score = alignment_of_3_seqs(list_of_seqs, substitution_matrix)
     elif type_alig.lower() == 'a':
-        print(multiple_alignment(list_of_seqs, substitution_matrix, aprox = True,alignment=True))
-    
-
+        M = two_approx_algorithm_for_MSA(list_of_seqs, substitution_matrix)
+        score = sp_score(M,substitution_matrix)
+        print(M)
+    print("The score: ", score)
 
 if __name__ == '__main__':
     main()
