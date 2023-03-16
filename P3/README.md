@@ -1,0 +1,34 @@
+P2 - 
+Bjarke, Paula, Genona
+
+To execute locally:
+
+run the file src/alignments_main.py for an interactive program
+
+for a non-interactive program, run the file:
+
+    - for exact solution:
+
+    python3 sp_exact_3.py seq1.fasta seq2.fasta seq3.fasta subst_matrix.txt 
+
+    - for aprox: 
+
+    python3 sp_approx.py a seq1.fasta seq2.fasta subst_matrix.txt 
+
+
+Both versions accept input sequences as strings (from the dictionary initialized by the matrix - by default A C T G) or fasta files. To parse succesfully the substitution matrix we need it in a text file in the following format:
+                         
+
+5                            
+
+A  0  5  2  5  
+
+C  5  0  5  2 
+
+G  2  5  0  5 
+
+T  5  2  5  0
+
+
+Where the first line is the gap cost.
+

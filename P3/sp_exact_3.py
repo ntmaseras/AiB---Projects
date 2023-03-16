@@ -5,7 +5,7 @@ import os
 
 def main():
     
-## python3 alignments_command.py e/a seq1.fasta seq2.fasta seq3.fasta subst_matrix.txt 
+## python3 alignments_command.py seq1.fasta seq2.fasta seq3.fasta subst_matrix.txt 
     
     # Initialize sequences - whether from file or from command line
     if 'fasta' in sys.argv[2]:
