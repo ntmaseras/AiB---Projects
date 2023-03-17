@@ -7,24 +7,24 @@ import pandas as pd
 
 def alignment_of_3_seqs(list_of_seqs, subst_matrix,gap_penalty=5): #build using MSA frpm sldes (slide 19 and 20) exact
     seq3, seq2, seq1 = list_of_seqs
-    t = np.zeros((len(seq3)+1, len(seq2)+1, len(seq1)+1))
+    t = np.zeros((len(seq1)+1, len(seq2)+1, len(seq3)+1))
     
-    for i in range(len(seq3)+1):
+    for i in range(len(seq1)+1):
         for j in range(len(seq2)+1):
-            for k in range(len(seq1)+1):
+            for k in range(len(seq3)+1):
                 v1 = v2 = v3 = v4 = v5 = v6 = v7 = np.inf
                 if i == 0 and j == 0 and k == 0:
                     #v0 = 0
                     t[i, j, k] = 0
                 else:
                     if i > 0 and j > 0 and k > 0:
-                        v1 = t[i-1, j-1, k-1] + subst_matrix[seq3[i-1]][seq2[j-1]] + subst_matrix[seq2[j-1]][seq1[k-1]] + subst_matrix[seq3[i-1]][seq1[k-1]]
+                        v1 = t[i-1, j-1, k-1] + subst_matrix[seq1[i-1]][seq2[j-1]] + subst_matrix[seq2[j-1]][seq3[k-1]] + subst_matrix[seq1[i-1]][seq3[k-1]]
                     if i > 0 and j > 0 and k >= 0:
-                        v2 = t[i-1, j-1, k] + subst_matrix[seq3[i-1]][seq2[j-1]] + gap_penalty + gap_penalty
+                        v2 = t[i-1, j-1, k] + subst_matrix[seq1[i-1]][seq2[j-1]] + gap_penalty + gap_penalty
                     if i > 0 and j >= 0 and k > 0:
-                        v3 = t[i-1, j, k-1] + subst_matrix[seq3[i-1]][seq1[k-1]] + gap_penalty + gap_penalty
+                        v3 = t[i-1, j, k-1] + subst_matrix[seq1[i-1]][seq3[k-1]] + gap_penalty + gap_penalty
                     if i >= 0 and j > 0 and k > 0:
-                        v4 = t[i, j-1, k-1] + subst_matrix[seq2[j-1]][seq1[k-1]] + gap_penalty + gap_penalty
+                        v4 = t[i, j-1, k-1] + subst_matrix[seq2[j-1]][seq3[k-1]] + gap_penalty + gap_penalty
                     if i > 0 and j >= 0 and k >= 0:
                         v5 = t[i-1, j, k] + gap_penalty + gap_penalty
                     if i >= 0 and j > 0 and k >= 0:
@@ -32,7 +32,7 @@ def alignment_of_3_seqs(list_of_seqs, subst_matrix,gap_penalty=5): #build using 
                     if i >= 0 and j >= 0 and k > 0:
                         v7 = t[i, j, k-1] + gap_penalty + gap_penalty
                     t[i, j, k] = min(v1, v2, v3, v4, v5, v6, v7)
-    
+    print(backtrack_exact(seq1,seq2,seq3,subst_matrix,5,t))
     return t[len(seq3),len(seq2),len(seq1)]
 
 
@@ -140,12 +140,12 @@ def two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix):
                     j = j + 1
             if i < len(M):
                 # add the remaining coloumns of M to MA
-                while i < len(M)-1:
+                while i < len(M):
                     MA.append(M[i].append('-'))
                     i = i + 1
             if j < len(A):
                 # add the remaining columns of A to MA
-                k = len(M[0])
+                k = len(MA[-1])
                 while j < len(A):
                     c = ['-']*(k-1)
                     c.append(A[j][1])
@@ -154,6 +154,101 @@ def two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix):
             M = MA
     return M
 
+def backtrack_exact(seq1,seq2,seq3,sub_matrix,GAPCOST,alignment_matrix):
+	n, m , o = len(seq1), len(seq2), len(seq3)
+	v = '-'+ seq1
+	w = '-' + seq2
+	z = '-' + seq3
+	backtrack_matrix = np.zeros((n+1,m+1,o+1)) 
+	for i in range(1,n+1):
+		for j in range(1,m+1):
+			for k in range(1,o+1):
+				all_match = alignment_matrix[i - 1,j - 1,k - 1] + sub_matrix[seq1[i - 1]][seq2[j - 1]] + sub_matrix[seq1[i - 1]][seq3[k - 1]] + sub_matrix[seq2[j - 1]][seq3[k - 1]]
+				n_m_match = alignment_matrix[i - 1,j - 1,k] + sub_matrix[seq1[i - 1]][seq2[j - 1]] + GAPCOST * 2
+				n_o_match = alignment_matrix[i - 1,j,k - 1] + sub_matrix[seq1[i - 1]][seq3[k - 1]] + GAPCOST * 2
+				m_o_match = alignment_matrix[i,j - 1,k - 1] + sub_matrix[seq2[j - 1]][seq3[k - 1]] + GAPCOST * 2
+				gap_i = alignment_matrix[i - 1,j,k] + GAPCOST * 2
+				gap_j = alignment_matrix[i,j - 1,k] + GAPCOST * 2
+				gap_k = alignment_matrix[i,j,k - 1] + GAPCOST * 2
+				alignment_matrix[i, j, k] = min(all_match, n_m_match, n_o_match, m_o_match, gap_i, gap_j, gap_k)
+				if alignment_matrix[i, j, k] == all_match:
+					backtrack_matrix[i, j, k] = 0
+				elif alignment_matrix[i, j, k] == n_m_match:
+					backtrack_matrix[i, j, k] = 1
+				elif alignment_matrix[i, j, k] == n_o_match:
+					backtrack_matrix[i, j, k] = 2
+				elif alignment_matrix[i, j, k] == m_o_match:
+					backtrack_matrix[i, j, k] = 3
+				elif alignment_matrix[i, j, k] == gap_i:
+					backtrack_matrix[i, j, k] = 4
+				elif alignment_matrix[i, j, k] == gap_j:
+					backtrack_matrix[i, j, k] = 5
+				elif alignment_matrix[i, j, k] == gap_k:
+					backtrack_matrix[i, j, k] = 6
+     
+	i, j, k, = n, m, o
+	v_alig, w_alig, z_alig = '', '', ''
+	while i > 0 and j > 0 and k > 0:
+		if backtrack_matrix[i,j,k]==0:
+			v_alig = v[i] + v_alig
+			w_alig = w[j] + w_alig
+			z_alig = z[k] + z_alig
+			i -= 1
+			j -= 1
+			k -= 1
+		elif backtrack_matrix[i, j, k] == 1:
+			v_alig = v[i] + v_alig
+			w_alig = w[j] + w_alig
+			z_alig = '-' + z_alig
+			i -= 1
+			j -= 1
+		elif backtrack_matrix[i, j, k] == 2:
+			v_alig = v[i] + v_alig
+			w_alig = '-' + w_alig
+			z_alig = z[k] + z_alig
+			i -= 1
+			k -= 1
+		elif backtrack_matrix[i, j, k] == 3:
+			v_alig = '-' + v_alig
+			w_alig = w[j] + w_alig
+			z_alig = z[k] + z_alig	
+			k -= 1
+			j -= 1
+		elif backtrack_matrix[i,j,k] == 4:
+			v_alig = v[i] + v_alig
+			w_alig = '-' + w_alig
+			z_alig = '-' + z_alig	
+			i -= 1		
+		elif backtrack_matrix[i,j,k] == 5:
+			v_alig = '-' + v_alig
+			w_alig = w[j] + w_alig
+			z_alig = '-' + z_alig	
+			j -= 1		
+		elif backtrack_matrix[i,j,k] == 6:
+			v_alig = '-' + v_alig
+			w_alig = '-' + w_alig
+			z_alig = z[k] + z_alig	
+			k -= 1	
+	while i > 0:
+		v_alig = v[i] + v_alig
+		w_alig = '-' + w_alig
+		z_alig = '-' + z_alig
+		i -= 1
+	while j > 0:
+		v_alig = '-' + v_alig
+		w_alig = w[j] + w_alig
+		z_alig = '-' + z_alig
+		j -= 1
+	while k > 0:					
+		v_alig = '-' + v_alig
+		w_alig = '-' + w_alig
+		z_alig = z[k] + z_alig
+		k -= 1
+
+	return v_alig, w_alig, z_alig
+
+
+				
 
 # trying to calculate sum  of pairwise alignment score for all pairs of sequences
 def unique_combinations(M: list[list]):

@@ -25,6 +25,7 @@ def main():
     substitution_matrix = parse_matrix_and_gap_cost_in_subst_matrix(sys.argv[4])
     # Get the optimal score of the linear global alignment 
     score = alignment_of_3_seqs([seq1,seq2,seq3], substitution_matrix)
+    
     print("The optimal score is: ",score)
     
     

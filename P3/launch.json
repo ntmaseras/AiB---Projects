@@ -5,13 +5,15 @@
     "version": "0.2.0",
     "configurations": [
 
-        {
+       {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "args": ["AATAAT", "AAGG","aaa" ,"P3/input/subst_matrix.txt"],
             "console": "integratedTerminal",
+            //"args": ["seq1.fasta", "seq2.fasta", "subst_matrix_a.txt","1"],
+            "args": ["AATAAT", "AAGG","aaa" ,"input/subst_matrix_a.txt"],
+            //"args": ["subst_matrix_a.txt","tests_aff.txt"],
             "justMyCode": true
         }
     ]
