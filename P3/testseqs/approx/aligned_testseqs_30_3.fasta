@@ -1,0 +1,6 @@
+>seq1 testseqs_30_3.fasta aligned
+A-C--AGA-TCGGCGTGACACAG-GA-ACACTCGCG
+>seq2 testseqs_30_3.fasta aligned
+--C--AGG-GCA-CGAGGCGAAATGATGCGGGCGGG
+>seq3 testseqs_30_3.fasta aligned
+GGCGTAAAGCCGA-AT-ACTCGT-GA-AGAG--GTT

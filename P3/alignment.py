@@ -1,62 +1,41 @@
 import numpy as np
 import itertools as it
+import pandas as pd
 
 #Exact 3 group pairwise alignment
 
-def alignment_of_3_seqs(list_of_seqs, subst_matrix): #build using MSA frpm sldes (slide 19 and 20)
-    seq1, seq2, seq3 = list_of_seqs
-    t = np.zeros((len(seq1)+1, len(seq2)+1, len(seq3)+1))
-    
-    
-    for i in range(1, len(seq1)+1):
-        for j in range(1, len(seq2)+1):
-            for k in range(1, len(seq3)+1):
-                v0 = v1 = v2 = v3 = v4 = v5 = v6 = v7 = np.inf
-                if i == 1 and j == 1 and k == 1:
-                    v0 = 0
-                if i > 1 and j > 1 and k > 1:
-                    v1 = t[i-1, j-1, k-1] + subst_matrix[seq1[i-1]][seq2[j-1]] + subst_matrix[seq2[j-1]][seq3[k-1]] + subst_matrix[seq1[i-1]][seq3[k-1]]
-                if i > 1 and j > 1 and k >= 1:
-                    v2 = t[i-1, j-1, k] + subst_matrix[seq1[i-1]][seq2[j-1]] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i > 1 and j >= 1 and k > 1:
-                    v3 = t[i-1, j, k-1] + subst_matrix[seq1[i-1]][seq3[k-1]] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i >= 1 and j > 1 and k > 1:
-                    v4 = t[i, j-1, k-1] + subst_matrix[seq2[j-1]][seq3[k-1]] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i > 1 and j >= 1 and k >= 1:
-                    v5 = t[i-1, j, k] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i >= 1 and j > 1 and k >= 1:
-                    v6 = t[i, j-1, k] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i >= 1 and j >= 1 and k > 1:
-                    v7 = t[i, j, k-1] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                t[i, j, k] = min(v0, v1, v2, v3, v4, v5, v6, v7)
-    return t[len(seq1),len(seq2),len(seq3)]
 
-def alignment_of_3_seqs_nona(list_of_seqs, subst_matrix,gap_penalty=10): #build using MSA frpm sldes (slide 19 and 20)
-    seq1, seq2, seq3 = list_of_seqs
-    t = np.zeros((len(seq1)+1, len(seq2)+1, len(seq3)+1))
+def alignment_of_3_seqs(list_of_seqs, subst_matrix,gap_penalty=5): #build using MSA frpm sldes (slide 19 and 20) exact
+    seq3, seq2, seq1 = list_of_seqs
+    t = np.zeros((len(seq3)+1, len(seq2)+1, len(seq1)+1))
     
-    for i in range(1, len(seq1)+1):
-        for j in range(1, len(seq2)+1):
-            for k in range(1, len(seq3)+1):
-                v0 = v1 = v2 = v3 = v4 = v5 = v6 = v7 = np.inf
-                if i == 1 and j == 1 and k == 1:
-                    v0 = 0
-                if i > 1 and j > 1 and k > 1:
-                    v1 = t[i-1, j-1, k-1] + subst_matrix[seq1[i-1]][seq2[j-1]] + subst_matrix[seq2[j-1]][seq3[k-1]] + subst_matrix[seq1[i-1]][seq3[k-1]]
-                if i > 1 and j > 1 and k >= 1:
-                    v2 = t[i-1, j-1, k] + subst_matrix[seq1[i-1]][seq2[j-1]] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i > 1 and j >= 1 and k > 1:
-                    v3 = t[i-1, j, k-1] + subst_matrix[seq1[i-1]][seq3[k-1]] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i >= 1 and j > 1 and k > 1:
-                    v4 = t[i, j-1, k-1] + subst_matrix[seq2[j-1]][seq3[k-1]] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i > 1 and j >= 1 and k >= 1:
-                    v5 = t[i-1, j, k] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i >= 1 and j > 1 and k >= 1:
-                    v6 = t[i, j-1, k] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                if i >= 1 and j >= 1 and k > 1:
-                    v7 = t[i, j, k-1] + subst_matrix['-']['-'] + subst_matrix['-']['-']
-                t[i, j, k] = min(v0, v1, v2, v3, v4, v5, v6, v7)
-    return t[len(seq1),len(seq2),len(seq3)]
+    for i in range(len(seq3)+1):
+        for j in range(len(seq2)+1):
+            for k in range(len(seq1)+1):
+                v1 = v2 = v3 = v4 = v5 = v6 = v7 = np.inf
+                if i == 0 and j == 0 and k == 0:
+                    #v0 = 0
+                    t[i, j, k] = 0
+                else:
+                    if i > 0 and j > 0 and k > 0:
+                        v1 = t[i-1, j-1, k-1] + subst_matrix[seq3[i-1]][seq2[j-1]] + subst_matrix[seq2[j-1]][seq1[k-1]] + subst_matrix[seq3[i-1]][seq1[k-1]]
+                    if i > 0 and j > 0 and k >= 0:
+                        v2 = t[i-1, j-1, k] + subst_matrix[seq3[i-1]][seq2[j-1]] + gap_penalty + gap_penalty
+                    if i > 0 and j >= 0 and k > 0:
+                        v3 = t[i-1, j, k-1] + subst_matrix[seq3[i-1]][seq1[k-1]] + gap_penalty + gap_penalty
+                    if i >= 0 and j > 0 and k > 0:
+                        v4 = t[i, j-1, k-1] + subst_matrix[seq2[j-1]][seq1[k-1]] + gap_penalty + gap_penalty
+                    if i > 0 and j >= 0 and k >= 0:
+                        v5 = t[i-1, j, k] + gap_penalty + gap_penalty
+                    if i >= 0 and j > 0 and k >= 0:
+                        v6 = t[i, j-1, k] + gap_penalty + gap_penalty
+                    if i >= 0 and j >= 0 and k > 0:
+                        v7 = t[i, j, k-1] + gap_penalty + gap_penalty
+                    t[i, j, k] = min(v1, v2, v3, v4, v5, v6, v7)
+    
+    return t[len(seq3),len(seq2),len(seq1)]
+
+
 
 #MSA 2-approximation 
 # first part making the pairwise global alignment
@@ -161,7 +140,7 @@ def two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix):
                     j = j + 1
             if i < len(M):
                 # add the remaining coloumns of M to MA
-                while i < len(M):
+                while i < len(M)-1:
                     MA.append(M[i].append('-'))
                     i = i + 1
             if j < len(A):
@@ -215,16 +194,25 @@ def multiple_alignment(list_of_seqs, subst_matrix, aprox = False, alignment = Fa
         #as of this moment, i dont generate the alignment but only return the score
         return score
     
-def print_alignment(seqs_align):
-    match_symb = ""
-    for i in range(len(seqs_align[0])):
-        if all(seq[i] == seqs_align[0][i] for seq in seqs_align):
-            match_symb += "|"
-        elif any(seq[i] != seqs_align[0][i] and seq[i] != "-" and seqs_align[0][i] != "-" for seq in seqs_align):
-            match_symb += "*"
-        else:
-            match_symb += " "
+def save_sequences_as_fasta(file_path, sequences,filename):
+    with open(file_path, 'w') as fasta_file:
+        for i, seq in enumerate(sequences):
+            desc = filename + ' aligned'
+            fasta_file.write('>seq{} {}\n'.format(i+1, desc))  # modify the description as needed
+            fasta_file.write('{}\n'.format(seq))
 
-    for seq_align in seqs_align:
-        print(seq_align)
-    print(match_symb)
+def print_alignment(M,output_file = False,filename = False):
+    alignment = [''.join(list(t)) for t in zip(*M)]
+    for seq in alignment:
+        print(seq)
+        
+    if output_file:
+        save_sequences_as_fasta(output_file,alignment,filename)
+        
+
+
+
+        
+
+
+

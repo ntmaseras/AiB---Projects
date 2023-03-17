@@ -22,8 +22,9 @@ def main():
         score = int(list_of_seq.pop(0))
     matrix_path = 'input/subst_matrix.txt'
     substitution_matrix = parse_matrix_and_gap_cost_in_subst_matrix(matrix_path)
-    computed_score = alignment_of_3_seqs_nona(list_of_seq, substitution_matrix)
+    computed_score = alignment_of_3_seqs(list_of_seq, substitution_matrix)
     
+    #print(fill_matrix(list_of_seq[0],list_of_seq[1],list_of_seq[2],substitution_matrix,5))
     if computed_score == score:
         print("Test passed")
     else:
