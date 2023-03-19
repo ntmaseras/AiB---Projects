@@ -33,6 +33,14 @@ def parse_matrix_and_gap(input_file):
     else:
         return substitution_matrix, gap_cost
     
+def read_n_fasta(filename, n = False):
+    '''
+    Return the first n sequences of the fasta file. If n is not provided, return all the sequences in the file.
+    '''
+    sequences = [str(record.seq) for record in SeqIO.parse(filename, "fasta")]
+    if n:  
+        return sequences[:n]
+    return sequences
 
 def parse_matrix_and_gap_cost_in_subst_matrix(input_file):
     substitution_matrix = {}

@@ -3,9 +3,7 @@ import itertools as it
 import pandas as pd
 
 #Exact 3 group pairwise alignment
-
-
-def alignment_of_3_seqs(list_of_seqs, subst_matrix,gap_penalty=5): #build using MSA frpm sldes (slide 19 and 20) exact
+def alignment_of_3_seqs(list_of_seqs, subst_matrix,gap_penalty=5, print_alignment = False): #build using MSA frpm sldes (slide 19 and 20) exact
     seq3, seq2, seq1 = list_of_seqs
     t = np.zeros((len(seq1)+1, len(seq2)+1, len(seq3)+1))
     
@@ -32,8 +30,13 @@ def alignment_of_3_seqs(list_of_seqs, subst_matrix,gap_penalty=5): #build using 
                     if i >= 0 and j >= 0 and k > 0:
                         v7 = t[i, j, k-1] + gap_penalty + gap_penalty
                     t[i, j, k] = min(v1, v2, v3, v4, v5, v6, v7)
-    print(backtrack_exact(seq1,seq2,seq3,subst_matrix,5,t))
-    return t[len(seq3),len(seq2),len(seq1)]
+    
+    seq1_align, seq2_align, seq3_align = backtrack_exact(seq1,seq2,seq3,subst_matrix,5,t)
+    if print_alignment:
+        print(seq1_align)
+        print(seq2_align)
+        print(seq3_align)
+    return t[len(seq1),len(seq2),len(seq3)], [seq1_align,seq2_align,seq3_align]
 
 
 
@@ -138,7 +141,7 @@ def two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix):
                     MA.append(M[i])
                     i = i + 1
                     j = j + 1
-            if i < len(M):
+            if i < len(M)-1:
                 # add the remaining coloumns of M to MA
                 while i < len(M):
                     MA.append(M[i].append('-'))
@@ -153,6 +156,7 @@ def two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix):
                     j = j + 1
             M = MA
     return M
+
 
 def backtrack_exact(seq1,seq2,seq3,sub_matrix,GAPCOST,alignment_matrix):
 	n, m , o = len(seq1), len(seq2), len(seq3)
@@ -248,7 +252,6 @@ def backtrack_exact(seq1,seq2,seq3,sub_matrix,GAPCOST,alignment_matrix):
 	return v_alig, w_alig, z_alig
 
 
-				
 
 # trying to calculate sum  of pairwise alignment score for all pairs of sequences
 def unique_combinations(M: list[list]):
@@ -268,26 +271,6 @@ def sp_score(M,substitution_matrix):
             sum_score += substitution_matrix[M[j][i[0]]][M[j][i[1]]]
     return sum_score
 
-def multiple_alignment(list_of_seqs, subst_matrix, aprox = False, alignment = False):
-    """
-    Takes a list of sequences and returns the multiple alignment of the sequences
-    aprox = True if you want to use the 2-approximation algorithm
-    aprox = False if you want to use the exact algorithm
-    as of this moment, i dont generate the alignment but only return the score for the exact algorithm
-    Furthermore, we need to give a substitution matrix as input, and the substitutuion matrix must look like this:
-    {'A': {'A': 0, 'C': 5, 'G': 2, 'T': 5, '-': 5}, where the substitution_matrix['-']['-'] = gapcost
-    """
-    if aprox:
-        M = two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix)
-        score = sp_score(M,subst_matrix)
-        if alignment:
-            return M, score
-        else:
-            return score
-    else:
-        score = alignment_of_3_seqs(list_of_seqs, subst_matrix)
-        #as of this moment, i dont generate the alignment but only return the score
-        return score
     
 def save_sequences_as_fasta(file_path, sequences,filename):
     with open(file_path, 'w') as fasta_file:
@@ -296,13 +279,16 @@ def save_sequences_as_fasta(file_path, sequences,filename):
             fasta_file.write('>seq{} {}\n'.format(i+1, desc))  # modify the description as needed
             fasta_file.write('{}\n'.format(seq))
 
-def print_alignment(M,output_file = False,filename = False):
-    alignment = [''.join(list(t)) for t in zip(*M)]
-    for seq in alignment:
-        print(seq)
-        
+
+def print_alignment(M,output_file = False,filename = ''):       
+    alignment = [''.join(list(t)) for t in zip(*M)] 
     if output_file:
         save_sequences_as_fasta(output_file,alignment,filename)
+    else:
+        for seq in alignment:
+            print(seq)
+
+
         
 
 

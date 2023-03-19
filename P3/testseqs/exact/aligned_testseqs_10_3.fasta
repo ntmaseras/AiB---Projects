@@ -1,0 +1,6 @@
+>seq1 testseqs_10_3.fasta aligned
+TTAACAACG-G
+>seq2 testseqs_10_3.fasta aligned
+GAGG-GGCGCC
+>seq3 testseqs_10_3.fasta aligned
+GAAGCGGTG-C
