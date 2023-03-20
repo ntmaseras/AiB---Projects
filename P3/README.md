@@ -8,11 +8,11 @@ for a non-interactive program, run the file:
 
     - for exact solution:
 
-    python3 src/sp_exact_3.py sequences.fasta subst_matrix.txt output_filename.fasta
+    python3 sp_exact_3.py input/sequences.fasta subst_matrix.txt output_filename.fasta
 
     - for aprox: 
 
-    python3 src/sp_approx.py sequences.fasta subst_matrix.txt output_filename.fasta
+    python3 sp_approx.py input/sequences.fasta subst_matrix.txt output_filename.fasta
 
 
 To parse succesfully the substitution matrix we need it in a text file in the following format:

@@ -5,7 +5,7 @@ import os
 
 def main():
     
-## python3 sp_approx_3.py tests/tests.fasta input/subst_matrix.txt output.fasta
+## python3 sp_approx_3.py input/sequences.fasta input/subst_matrix.txt output.fasta
     
     # Initialize sequences from file
     list_of_seqs = read_n_fasta(sys.argv[1])
