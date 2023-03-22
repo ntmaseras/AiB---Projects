@@ -45,7 +45,7 @@ def main():
                 print("--Alignment saved in ",output_file,"--")
             
         print("The optimal score: ", score)
-        print("Do you want to align more other sequences? (Y/N)")
+        print("Do you want to align other sequences? (Y/N)")
         while True:
             answer = input().strip().lower()
             if answer == 'y':

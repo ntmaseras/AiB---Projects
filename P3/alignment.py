@@ -4,7 +4,7 @@ import pandas as pd
 
 #Exact 3 group pairwise alignment
 def alignment_of_3_seqs(list_of_seqs, subst_matrix,gap_penalty=5, print_alignment = False): #build using MSA frpm sldes (slide 19 and 20) exact
-    seq3, seq2, seq1 = list_of_seqs
+    seq1, seq2, seq3 = list_of_seqs
     t = np.zeros((len(seq1)+1, len(seq2)+1, len(seq3)+1))
     
     for i in range(len(seq1)+1):
@@ -275,7 +275,7 @@ def sp_score(M,substitution_matrix):
 def save_sequences_as_fasta(file_path, sequences,filename):
     with open(file_path, 'w') as fasta_file:
         for i, seq in enumerate(sequences):
-            desc = filename + ' aligned'
+            desc = filename + 'aligned'
             fasta_file.write('>seq{} {}\n'.format(i+1, desc))  # modify the description as needed
             fasta_file.write('{}\n'.format(seq))
 
