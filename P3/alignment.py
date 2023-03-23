@@ -89,12 +89,53 @@ def backtrack(seq1,seq2,subst_matrix,M):
     return list_of_columns
 
 
+
+    
+
+def calculateSequenceDistanceMatrix(sequences, subst_matrix):
+    """
+    Calculate a matrix of edit distance between a list of sequences.
+    Return the matrix.
+    """
+    #Note: For the sake of simplicity, this calculates ANY pair of sequences.
+    # If performance matters, one would only calculate half of that
+    dim = len(sequences)
+    matrix = np.zeros((dim, dim))
+    for i in range(len(sequences)):
+        for j in range(len(sequences)):
+            M = global_alignment_linear(sequences[i], sequences[j], subst_matrix)
+            matrix[i,j] = M[-1][-1]
+    return matrix
+
+def center_string(distanceMatrix):
+    """
+    Calculate the center string (represented by its index in the sequence array)
+    for a given sequence edit distance matrix.
+    Return the 1-based index of the center string
+    """
+    #Calculate the sums for any row
+    rowSums = [sum(distanceMatrix[:,i]) for i in range(distanceMatrix.shape[1])]
+    #If the same row score occurs multiple times, use the first occurrence
+    return rowSums.index(min(rowSums)) #+ 1: One-based indices  
+
+
 def two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix):
     # the first seq in list be s1 (the reference seq)
-    s1 = list_of_seqs[0]
-    M = None
-    # make the pairwise alignment
-    for i in range(1,len(list_of_seqs)):
+    distance_matrix = calculateSequenceDistanceMatrix(list_of_seqs, subst_matrix)
+    idx = center_string(distance_matrix)
+    indxs = list(range(0,len(list_of_seqs)))  
+    ## starting
+    indxs.pop(idx)
+    s1 = list_of_seqs[idx]
+    s2_idx = indxs.index(indxs[0])
+    s2 = list_of_seqs[indxs[0]]
+    indxs.pop(s2_idx)
+    pairwise_matrix = global_alignment_linear(s1, s2, subst_matrix)
+    # make pairwise back track, corresponding to the A matrix in slides
+    A = backtrack(s1, s2,subst_matrix, pairwise_matrix)
+    M = A
+    for i in indxs:
+        
         pairwise_matrix = global_alignment_linear(s1, list_of_seqs[i], subst_matrix)
     # make pairwise back track, corresponding to the A matrix in slides
         A = backtrack(s1, list_of_seqs[i],subst_matrix, pairwise_matrix)

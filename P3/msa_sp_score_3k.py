@@ -87,7 +87,7 @@ def remove_whitespaces(s):
 # Returns the sp-score of the MSA stored in the FASTA file 'filename'
 ###########################################################################
 
-def compute_sp_score(filename):	
+def compute_sp_score(filename,cost = cost):	
 	# Read FASTA file and convert input strings to sequences
 	row = []
 	for s in read_fasta(filename):

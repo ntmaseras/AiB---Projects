@@ -9,15 +9,9 @@ def main():
     while True:
         
         print("--- Multiple alignment ---")
-        
-        
-        
         list_of_seqs,substitution_matrix = read_sequences_and_subst_matrix()
-
-                
         
         ## exact solution
-        
         print("---EXACT ALIGNMENT---")
         score, aligned_sequences = alignment_of_3_seqs(list_of_seqs, substitution_matrix)
         output_file = 'output/generated_alignment_exact.fasta'
