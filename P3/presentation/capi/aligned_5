@@ -1,0 +1,476 @@
+>seq1 aligned
+AAG-A
+>seq2 aligned
+TTC-T
+>seq3 aligned
+GGGGG
+>seq4 aligned
+GGATG
+>seq5 aligned
+AAAAA
+>seq6 aligned
+TT-C-
+>seq7 aligned
+TT-CT
+>seq8 aligned
+TT-TT
+>seq9 aligned
+AAATT
+>seq10 aligned
+TTTG-
+>seq11 aligned
+CC-AA
+>seq12 aligned
+TT-TT
+>seq13 aligned
+GGGTC
+>seq14 aligned
+CCTTT
+>seq15 aligned
+GGACG
+>seq16 aligned
+GG--C
+>seq17 aligned
+AAA-T
+>seq18 aligned
+TT-GG
+>seq19 aligned
+CCCTT
+>seq20 aligned
+AGAA-
+>seq21 aligned
+TTCTT
+>seq22 aligned
+GGGTC
+>seq23 aligned
+TTGCG
+>seq24 aligned
+TTT-C
+>seq25 aligned
+GG--G
+>seq26 aligned
+AAA-T
+>seq27 aligned
+AA-TT
+>seq28 aligned
+GGGGG
+>seq29 aligned
+AAAAA
+>seq30 aligned
+AAG-A
+>seq31 aligned
+GGGGG
+>seq32 aligned
+TTTAA
+>seq33 aligned
+AAGGA
+>seq34 aligned
+CCAGG
+>seq35 aligned
+AATCT
+>seq36 aligned
+AACTA
+>seq37 aligned
+AAGGC
+>seq38 aligned
+AAGCA
+>seq39 aligned
+TTGTA
+>seq40 aligned
+GGGGA
+>seq41 aligned
+TTTCA
+>seq42 aligned
+CTGTT
+>seq43 aligned
+CCC-G
+>seq44 aligned
+TTGTT
+>seq45 aligned
+CTTAC
+>seq46 aligned
+AATGA
+>seq47 aligned
+AA--T
+>seq48 aligned
+TTA-T
+>seq49 aligned
+GGT-A
+>seq50 aligned
+CCACA
+>seq51 aligned
+TTCGT
+>seq52 aligned
+AAGGG
+>seq53 aligned
+TT-TC
+>seq54 aligned
+GGTAT
+>seq55 aligned
+CCG-A
+>seq56 aligned
+AACGT
+>seq57 aligned
+GGGCG
+>seq58 aligned
+AATCC
+>seq59 aligned
+AAGCA
+>seq60 aligned
+AAGC-
+>seq61 aligned
+AATT-
+>seq62 aligned
+TTGT-
+>seq63 aligned
+CCA--
+>seq64 aligned
+TT-G-
+>seq65 aligned
+TTC-G
+>seq66 aligned
+AAC-A
+>seq67 aligned
+GGTGA
+>seq68 aligned
+AACTA
+>seq69 aligned
+GGG-A
+>seq70 aligned
+TTGTT
+>seq71 aligned
+GGTTC
+>seq72 aligned
+TTCCT
+>seq73 aligned
+CCGCT
+>seq74 aligned
+CCGGA
+>seq75 aligned
+AATTG
+>seq76 aligned
+AAGGA
+>seq77 aligned
+TTT--
+>seq78 aligned
+AATG-
+>seq79 aligned
+TT-CG
+>seq80 aligned
+GGGAT
+>seq81 aligned
+TTAA-
+>seq82 aligned
+CCCCG
+>seq83 aligned
+TTGGT
+>seq84 aligned
+GGGGC
+>seq85 aligned
+GGTAC
+>seq86 aligned
+AAGAA
+>seq87 aligned
+GGCAA
+>seq88 aligned
+TTCAT
+>seq89 aligned
+TTTGC
+>seq90 aligned
+GGGCT
+>seq91 aligned
+AAGG-
+>seq92 aligned
+TTG-G
+>seq93 aligned
+CCGCT
+>seq94 aligned
+AATGC
+>seq95 aligned
+AATGT
+>seq96 aligned
+AACGG
+>seq97 aligned
+GGCAG
+>seq98 aligned
+AATAA
+>seq99 aligned
+GGCTG
+>seq100 aligned
+CCATT
+>seq101 aligned
+CCGAT
+>seq102 aligned
+TTAC-
+>seq103 aligned
+GGGA-
+>seq104 aligned
+TTTG-
+>seq105 aligned
+CTGAG
+>seq106 aligned
+TTTTA
+>seq107 aligned
+CCTAT
+>seq108 aligned
+TTTAC
+>seq109 aligned
+AATAA
+>seq110 aligned
+CCGT-
+>seq111 aligned
+AAGTA
+>seq112 aligned
+AAGAG
+>seq113 aligned
+AAGAG
+>seq114 aligned
+GGTAA
+>seq115 aligned
+TTCA-
+>seq116 aligned
+GGTC-
+>seq117 aligned
+TTGTA
+>seq118 aligned
+GG-GC
+>seq119 aligned
+AAACC
+>seq120 aligned
+CTA-T
+>seq121 aligned
+CCGGG
+>seq122 aligned
+AAGAT
+>seq123 aligned
+CCACC
+>seq124 aligned
+AATTT
+>seq125 aligned
+TTGG-
+>seq126 aligned
+AA-CC
+>seq127 aligned
+TTGGC
+>seq128 aligned
+TTACA
+>seq129 aligned
+TT--C
+>seq130 aligned
+TTCGA
+>seq131 aligned
+GGTGA
+>seq132 aligned
+CCTCA
+>seq133 aligned
+AAGGG
+>seq134 aligned
+AATTT
+>seq135 aligned
+AACG-
+>seq136 aligned
+TTAAG
+>seq137 aligned
+TTGGT
+>seq138 aligned
+TTTCG
+>seq139 aligned
+TTGTA
+>seq140 aligned
+GGACC
+>seq141 aligned
+TTTGC
+>seq142 aligned
+AATCA
+>seq143 aligned
+TTGTC
+>seq144 aligned
+GGCGA
+>seq145 aligned
+CCCA-
+>seq146 aligned
+TTA--
+>seq147 aligned
+GG-G-
+>seq148 aligned
+AATA-
+>seq149 aligned
+AATCT
+>seq150 aligned
+AAGT-
+>seq151 aligned
+CCGTA
+>seq152 aligned
+TTACT
+>seq153 aligned
+TTGCT
+>seq154 aligned
+CCATT
+>seq155 aligned
+TTCGT
+>seq156 aligned
+CCGGG
+>seq157 aligned
+AATAC
+>seq158 aligned
+AAGCA
+>seq159 aligned
+CCCG-
+>seq160 aligned
+CCAGG
+>seq161 aligned
+AAAGA
+>seq162 aligned
+GGAGT
+>seq163 aligned
+AAAGT
+>seq164 aligned
+AGTAT
+>seq165 aligned
+GGGCT
+>seq166 aligned
+AATA-
+>seq167 aligned
+AAGGG
+>seq168 aligned
+AGCGC
+>seq169 aligned
+GGTCA
+>seq170 aligned
+GGTTT
+>seq171 aligned
+GGT--
+>seq172 aligned
+CCCG-
+>seq173 aligned
+CCA-G
+>seq174 aligned
+TTGTC
+>seq175 aligned
+TTCGT
+>seq176 aligned
+CCCGG
+>seq177 aligned
+AAAGA
+>seq178 aligned
+CCTGA
+>seq179 aligned
+AAGTA
+>seq180 aligned
+AGCTC
+>seq181 aligned
+TTATT
+>seq182 aligned
+GG-C-
+>seq183 aligned
+TTG--
+>seq184 aligned
+CCA-T
+>seq185 aligned
+CCATC
+>seq186 aligned
+TT-CT
+>seq187 aligned
+TTGAC
+>seq188 aligned
+TTA-A
+>seq189 aligned
+GGAGA
+>seq190 aligned
+TTC-C
+>seq191 aligned
+GG-AC
+>seq192 aligned
+TTTTA
+>seq193 aligned
+AAT--
+>seq194 aligned
+AAGAG
+>seq195 aligned
+GGGAA
+>seq196 aligned
+AA-CA
+>seq197 aligned
+AAAT-
+>seq198 aligned
+TCGGG
+>seq199 aligned
+GGTGA
+>seq200 aligned
+AAGGA
+>seq201 aligned
+--TCA
+>seq202 aligned
+--CCG
+>seq203 aligned
+--CCG
+>seq204 aligned
+--ACG
+>seq205 aligned
+--G--
+>seq206 aligned
+--T-C
+>seq207 aligned
+--CTC
+>seq208 aligned
+--TGT
+>seq209 aligned
+--G-T
+>seq210 aligned
+--TCC
+>seq211 aligned
+--TGA
+>seq212 aligned
+--TCC
+>seq213 aligned
+--ATA
+>seq214 aligned
+---CG
+>seq215 aligned
+--GAT
+>seq216 aligned
+--AGG
+>seq217 aligned
+--TGT
+>seq218 aligned
+--GAC
+>seq219 aligned
+--TGC
+>seq220 aligned
+--GGT
+>seq221 aligned
+--ACT
+>seq222 aligned
+--TCT
+>seq223 aligned
+---TG
+>seq224 aligned
+---TT
+>seq225 aligned
+---CG
+>seq226 aligned
+-----
+>seq227 aligned
+---A-
+>seq228 aligned
+---CT
+>seq229 aligned
+---CA
+>seq230 aligned
+---CA
+>seq231 aligned
+---TG
+>seq232 aligned
+---CA
+>seq233 aligned
+---TA
+>seq234 aligned
+----T
+>seq235 aligned
+----G
+>seq236 aligned
+----A
+>seq237 aligned
+-----
+>seq238 aligned
+-----
