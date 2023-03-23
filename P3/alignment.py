@@ -147,7 +147,7 @@ def two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix):
                 # add the remaining coloumns of M to MA
                 while i < len(M):
                     M[i].append('-')
-                    MA.append(M[i]) ### THE MISTAKE WAS HERE -> MA.append(M[i].append('-'))
+                    MA.append(M[i]) ### THE MISTAKE WAS HERE -> MA.append(M[i].append('-')), for some reason it didn't do it well
                     i = i + 1
             if j < len(A):
                 # add the remaining columns of A to MA
