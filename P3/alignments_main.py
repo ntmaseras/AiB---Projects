@@ -2,6 +2,7 @@ import sys
 from alignment import *
 from parsing import *
 import os
+from msa_sp_score_3k  import compute_sp_score
 
 
 def main():
@@ -15,6 +16,7 @@ def main():
         
         
         list_of_seqs,substitution_matrix = read_sequences_and_subst_matrix()
+        print(substitution_matrix)
     
         print("Do you want to see an optimal alignment and store it in a file? (y/n)")
         while True:
@@ -37,14 +39,16 @@ def main():
         ## approx solution
         elif type_alig.lower() == 'a':
             M = two_approx_algorithm_for_MSA(list_of_seqs, substitution_matrix)
-            score = sp_score(M,substitution_matrix)
+            print(M)
+            #score = sp_score(M,substitution_matrix)
             if see_alignment == 'y':
                 output_file = 'output/generated_alignment_approx.fasta'
                 print_alignment(M)
                 print_alignment(M,output_file)
                 print("--Alignment saved in ",output_file,"--")
+                print("The score: ",compute_sp_score(output_file))
             
-        print("The optimal score: ", score)
+        #print("The optimal score: ", score)
         print("Do you want to align other sequences? (Y/N)")
         while True:
             answer = input().strip().lower()

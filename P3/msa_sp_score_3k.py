@@ -113,3 +113,4 @@ if __name__ == '__main__':
 	except IOError:
 		print("ERROR: Cannot open input file %s" % (sys.argv[1]))
 		sys.exit(1)
+

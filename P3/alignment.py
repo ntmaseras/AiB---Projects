@@ -16,7 +16,7 @@ def alignment_of_3_seqs(list_of_seqs, subst_matrix,gap_penalty=5, print_alignmen
                     t[i, j, k] = 0
                 else:
                     if i > 0 and j > 0 and k > 0:
-                        v1 = t[i-1, j-1, k-1] + subst_matrix[seq1[i-1]][seq2[j-1]] + subst_matrix[seq2[j-1]][seq3[k-1]] + subst_matrix[seq1[i-1]][seq3[k-1]]
+                        v1 = t[i-1, j-1, k-1] + subst_matrix[seq1[i-1]][seq2[j-1]] + subst_matrix[seq1[j-1]][seq3[k-1]] + subst_matrix[seq2[i-1]][seq3[k-1]]
                     if i > 0 and j > 0 and k >= 0:
                         v2 = t[i-1, j-1, k] + subst_matrix[seq1[i-1]][seq2[j-1]] + gap_penalty + gap_penalty
                     if i > 0 and j >= 0 and k > 0:
@@ -62,7 +62,7 @@ def global_alignment_linear(seq1, seq2,subst_matrix):
 # Traceback and compute the alignment
 def backtrack(seq1,seq2,subst_matrix,M):
     alignment1, alignment2 = "", ""
-    i, j = len(seq1), len(seq2)
+    i, j = len(seq1), len(seq2) 
     while i > 0 or j > 0:
         if i > 0 and M[i][j] == M[i-1][j] + subst_matrix['-']['-']:
             alignment1 = seq1[i-1] + alignment1
@@ -80,10 +80,12 @@ def backtrack(seq1,seq2,subst_matrix,M):
     # return list of columns of seq1 and seq2
     list_of_columns = [[i] for i in alignment1]
     for i,v in enumerate(alignment2):
-        if i > len(list_of_columns):
-            list_of_columns.append([v])
-        else:
+        if i < len(list_of_columns):
             list_of_columns[i].append(v)
+        else:
+            list_of_columns[i].append("-")
+            list_of_columns[i].append(v)
+
     return list_of_columns
 
 
@@ -141,10 +143,11 @@ def two_approx_algorithm_for_MSA(list_of_seqs, subst_matrix):
                     MA.append(M[i])
                     i = i + 1
                     j = j + 1
-            if i < len(M)-1:
+            if i <= len(M):
                 # add the remaining coloumns of M to MA
                 while i < len(M):
-                    MA.append(M[i].append('-'))
+                    M[i].append('-')
+                    MA.append(M[i]) ### THE MISTAKE WAS HERE -> MA.append(M[i].append('-'))
                     i = i + 1
             if j < len(A):
                 # add the remaining columns of A to MA

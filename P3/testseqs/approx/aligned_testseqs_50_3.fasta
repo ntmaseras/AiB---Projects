@@ -1,6 +1,6 @@
->seq1 testseqs_50_3.fasta aligned
+>seq1 testseqs_50_3.fastaaligned
 A---AATCTATATTTTAATA-GTGTCGGTCGCTGAGATTA--T-CTAGC-ATACAAGA
->seq2 testseqs_50_3.fasta aligned
+>seq2 testseqs_50_3.fastaaligned
 CTCTGATCGA-GCTCCGGT--GTG-CAG-CG-TG-GATCAAGTTCTGAG-GTATTTCG
->seq3 testseqs_50_3.fasta aligned
+>seq3 testseqs_50_3.fastaaligned
 C---CACTCCT-TGAGGGCACGTGCGGGAGACCTTT-CTG--T-TTAGCCAGCCGCCG

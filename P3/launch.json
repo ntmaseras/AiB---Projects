@@ -11,7 +11,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["AATAAT", "AAGG","aaa" ,"input/subst_matrix_a.txt"],
+            "args": ["testseqs/testseqs_10_3.fasta", "input/subst_matrix.txt","output_file.fasta"],
             "justMyCode": true
         }
     ]
