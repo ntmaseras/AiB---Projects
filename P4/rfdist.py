@@ -25,15 +25,15 @@ def get_rf_distance(tree1, tree2):
 
 def main():
     ## test
-    tree1 = parse_newick('Testdata/tree1.new')
-    tree2 = parse_newick('Testdata/tree2.new')
+    #tree1 = parse_newick('Testdata/tree1.new')
+    #tree2 = parse_newick('Testdata/tree2.new')
     ## dist = get_rf_distance(tree1,tree2)
     ## print("Testdata distance: ",dist)
     ####
-    #tree1 = parse_newick(sys.argv[1])
-    #tree2 = parse_newick(sys.argv[2])
+    tree1 = parse_newick(sys.argv[1])
+    tree2 = parse_newick(sys.argv[2])
     dist = get_rf_distance(tree1,tree2)
-    print("Given trees distance: ",dist)
+    print("Computed distance: ",dist)
     
     
 if __name__ == '__main__':
