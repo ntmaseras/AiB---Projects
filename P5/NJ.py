@@ -1,6 +1,4 @@
-import sys
 import numpy as np
-import scipy as scipy
 import itertools
 from parsing import *
 
