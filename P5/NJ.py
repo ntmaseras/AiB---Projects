@@ -10,8 +10,8 @@ def calculateN(d):
     labels = list(d.keys())
     for i in range(s):
         for j in range(s):
-            sumI = (1/ (s-2)) * sum(d[labels[i]][label] for label in labels if label != labels[i])
-            sumJ = (1/ (s-2)) * sum(d[labels[j]][label] for label in labels if label != labels[j])
+            sumI = (1/ (s-2)) * sum(d[labels[i]][label] for label in labels)
+            sumJ = (1/ (s-2)) * sum(d[labels[j]][label] for label in labels)
             N[i][j] = d[labels[i]][labels[j]] - (sumI + sumJ)
     return N
 
@@ -48,6 +48,7 @@ def NeighbourJoining(d):
     labels = list(d.keys())
     nodes = {}
     S = len(d)
+    T = []
     while S > 3:
         ## 1.a Compute N
         N = calculateN(d)
@@ -61,15 +62,16 @@ def NeighbourJoining(d):
         newEdges = getNewEdges(i,j,d)
         nodes[(i,j)] = newEdges
         print("Merging: ({}:{},{}:{})".format(i, newEdges[0], j, newEdges[1]))
-
-        ## 4. Update the d matrix by deleting rows and columns corresponding
+        T.append("({}:{},{}:{})".format(i, newEdges[0], j, newEdges[1]))
+        ## 4. Update the ds matrix by deleting rows and columns corresponding
         ## to i and j and adding a new row and column for the new taxon k
         a = updateDistanceMatrix(i,j,d)
        
         S-=1
         
+        return T
     
 
 if __name__ == "__main__":
-    D, gap_cost = parse_matrix_and_gap("P5/test.phy")
+    D, gap_cost = parse_matrix_and_gap("P5/example_slide4.phy")
     NeighbourJoining(D)
