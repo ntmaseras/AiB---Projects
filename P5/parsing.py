@@ -1,49 +1,39 @@
 from Bio import SeqIO
 from Bio import Phylo
-
-def fasta_seq(input_file):
-    sequence = ''
-    with open(input_file,'r') as f:
-        for i in SeqIO.parse(f,'fasta'): sequence = i.seq
-    return str(sequence)
-
-
-## generate substitution matrix and initialize gap costs 
-def parse_matrix_and_gap(input_file):
-    substitution_matrix = {}
-    with open(input_file, 'r') as f:
-        lines = f.readlines()
-
-        # Extract keys and gap  -> special case for affine (gap extent)
-        gap_cost = int(lines[0][0])
-        first_line = lines[0].strip()
-        
-        keys = [r[0] for r in lines[1:]]
-        for line in lines[1:]:
-            row = line.strip().split()
-
-            key = row[0]
-            substitution_matrix[key] = {}
-
-            for i, val in enumerate(row[1:]):
-                substitution_matrix[key][keys[i]] = float(val)
-
-    if len(first_line)> 1:
-            gap_extent = int(first_line[-1])
-            return substitution_matrix, [gap_cost,gap_extent]
-    else:
-        return substitution_matrix, gap_cost
 import numpy as np
 
-def getValues(d):    
-    matrix = [[v for v in inner_dict.values()] for inner_dict in d.values()]
-    matrix = np.vstack(matrix)
-    keys = {k: i for i, k in enumerate(d.keys())}
-    return matrix, keys
+def parse_phy_file(input_file):
+    matrix = []
+    row_dict = {}
 
-def print_tree(path_tree):
+    with open(input_file) as f:
+        lines = f.readlines()
+
+    # extract the row labels and matrix values
+    row_labels = []
+    matrix_data = []
+    for line in lines[1:]:
+        parts = line.strip().split()
+        row_labels.append(parts[0])
+        matrix_data.append(list(map(float, parts[1:])))
+
+    # create the dictionary mapping row labels to row indices
+    row_dict = {label: idx for idx, label in enumerate(row_labels)}
+
+    matrix = np.array(matrix_data)
+
+    return matrix, row_dict
+
+
+
+def print_tree_branch(path_tree):
     tree = Phylo.read(path_tree, 'newick')
     Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
+    
+def print_tree(path_tree):
+    tree = Phylo.read(path_tree, 'newick')
+    Phylo.draw_ascii(tree)
+
 
 
 

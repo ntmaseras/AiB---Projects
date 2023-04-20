@@ -1,6 +1,6 @@
 import numpy as np
-import itertools
 from parsing import *
+import sys
 
 def calculateN(d,nodes):
     s = len(d)
@@ -95,11 +95,8 @@ def NeighbourJoining(d,nodes):
         d,nodes,new_node = updateDistanceMatrix(node_a,node_b,d,nodes)
         
         ## save Newick format
-        print("Merging: ({}:{},{}:{})".format(node_a, newEdges[0], node_b, newEdges[1]))
+        ## print("Merging: ({}:{},{}:{})".format(node_a, newEdges[0], node_b, newEdges[1]))
         T[new_node] = f"({node_a}:{newEdges[0]},{node_b}:{newEdges[1]})"
-        
-        #T.append("({}:{},{}:{})".format(node_a, newEdges[0], node_b, newEdges[1]))
-        test = 1
         
         S-=1
     
@@ -115,22 +112,34 @@ def NeighbourJoining(d,nodes):
     for clade, newick_format in T.items():
         newick = newick.replace(clade,newick_format)
     
-    
     return newick
     
 
 
 def NJ(phy_file, outputfile = None):
-    D, _ = parse_matrix_and_gap(phy_file)
-    D, nodes = getValues(D)
+    
+    D, nodes = parse_phy_file(phy_file)
+  
     tree = NeighbourJoining(D,nodes)
     
+
     with open(outputfile, "w") as f:
         f.write(tree)
+        
+    ## return tree
+
+def main():
     
+    if len(sys.argv) == 3:
+        NJ(sys.argv[1],sys.argv[2])
+    else: 
+        outputfile = "output/"+ sys.argv[1][-10:-4] + ".nwk"
+        NJ(sys.argv[1],outputfile)
+        
 
 if __name__ == "__main__":
-    D, _ = parse_matrix_and_gap("P5/example_slide4.phy")
-    D, nodes = getValues(D)
-    tree = NeighbourJoining(D,nodes)
-
+    main()
+   
+    # phy_file = "P5/unique_distance_matrices/89_Adeno_E3_CR1.phy"
+    # outputfile  = "P5/output/89_Adeno_E3_CR1.nwk"
+    # print(NJ(phy_file,outputfile))
