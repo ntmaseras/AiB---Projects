@@ -1,4 +1,5 @@
 from Bio import SeqIO
+from Bio import Phylo
 
 def fasta_seq(input_file):
     sequence = ''
@@ -36,7 +37,15 @@ import numpy as np
 
 def getValues(d):    
     matrix = [[v for v in inner_dict.values()] for inner_dict in d.values()]
+    matrix = np.vstack(matrix)
     keys = {k: i for i, k in enumerate(d.keys())}
     return matrix, keys
+
+def print_tree(path_tree):
+    tree = Phylo.read(path_tree, 'newick')
+    Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
+
+
+
 
 

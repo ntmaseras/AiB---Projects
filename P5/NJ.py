@@ -2,17 +2,16 @@ import numpy as np
 import itertools
 from parsing import *
 
-def calculateN(d):
+def calculateN(d,nodes):
     s = len(d)
     N = np.zeros((s,s))
-    #d,_ = getValues(d)
-    labels = list(d.keys())
+    
     for i in range(s):
         for j in range(s):
             if i != j:
-                sumI = (1/ (s-2)) * sum(d[labels[i]][label] for label in labels)
-                sumJ = (1/ (s-2)) * sum(d[labels[j]][label] for label in labels)
-                N[i][j] = d[labels[i]][labels[j]] - (sumI + sumJ)
+                sumI = (1/ (s-2)) * sum(d[i,label] for label in nodes.values())
+                sumJ = (1/ (s-2)) * sum(d[j,label] for label in nodes.values())
+                N[i][j] = d[i,j] - (sumI + sumJ)
             else:
                 N[i][j] = 0 
     return N
@@ -23,81 +22,115 @@ def minimum_entry(N):
 
 
 def getNewEdges(i,j,d):
-    d,keys = getValues(d)
-    sumI = 0
-    sumJ = 0
-    for k in range(len(d)):
-        sumI += d[keys[i]][k]
-        sumJ += d[keys[j]][k]
-
-    dki = 0.5 * (d[keys[i]][keys[j]] + sumI  - sumJ)
-    dkj = 0.5 *(d[keys[i]][keys[j]] + sumJ - sumI) #- dki 
+    
+    sumI = sum(d[i,k] for k in range(len(d)))
+    sumJ = sum(d[j,k] for k in range(len(d)))
+    
+    dki = round(0.5 * (d[i,j] + sumI  - sumJ),3)
+    dkj = round(0.5 * (d[i,j] + sumJ  - sumI),3) #- dki 
     return (dki,dkj)
 
-def updateDistanceMatrix(a,b,D,nodes):
-     
-    D,keys = getValues(D)
-    original_set_of_nodes = keys.copy()
-    original_set_of_nodes.pop(a)
-    original_set_of_nodes.pop(b)
-    
-    m = np.vstack(D)
+
+def updateDistanceMatrix(a,b,m,keys):
+    ## get the indices of the nodes to merge
     i = keys[a]
     j = keys[b]
     
+    ## update the new keys
+    updated_nodes = keys.copy()
+    ### remove a and b
+    updated_nodes.pop(a)
+    updated_nodes.pop(b)
+    ### update the indices
+    updated_nodes = {k: i for i, k in enumerate(sorted(updated_nodes.keys(), key=lambda x: updated_nodes[x]))}
+    
     
     size_nd = len(m)-1
-    nd = np.empty((size_nd,size_nd))
-    nd[:] = np.NaN
+    nd = np.zeros((size_nd,size_nd))
+    ## update distance matrix for the nodes that are not involved in the merging operation, keep the distances
+    for node, upd_index in updated_nodes.items():
+        index_in_m = keys.get(node)
+        for node_ , upd_index_ in updated_nodes.items():
+            index_in_m_ = keys.get(node_)
+            nd[upd_index,upd_index_] = m[index_in_m,index_in_m_]
+            
+    ### generate a new index for the new node
+    updated_nodes[a+b] = len(updated_nodes)    
+    
+    ## compute the distance from all the nodes to the merged node
+    for node, upd_index in updated_nodes.items():
+        # get the index in the original distance matrix 
+        index_in_m = keys.get(node)
+        # if the node exists in the matrix (it is not the merged node), get the distance
+        if index_in_m is not None:
+            nd[-1][upd_index] = (m[i][index_in_m] + m[j][index_in_m] - m[i][j]) / 2.
+            nd[upd_index][-1] =(m[i][index_in_m] + m[j][index_in_m] - m[i][j]) / 2.
+
+    return nd,updated_nodes,a+b
     
 
-    for v in range(0,len(nd)-1):
-        if v != i or v != j:
-            for w in range(0,len(nd)-1):
-                if w != i or  w != j:
-                    nd[v,w] = m[v,w]
-      
-    for node in original_set_of_nodes.values():
-        for d in range(0,len(nd)):
-            if len(nd)-1 == d:
-                nd[-1][-1] = 0
-            else:
-                nd[-1][d] = (m[i][node] + m[j][node] - m[i][j]) / 2.
-                nd[d][-1] =(m[i][node] + m[j][node] - m[i][j]) / 2.
 
-                
-   
+def NeighbourJoining(d,nodes):
     
-    return nd
-    
-def NeighbourJoining(d):
-    labels = list(d.keys())
-    nodes = {}
     S = len(d)
-    T = []
+    T = {}
+    # d -> np array + dictionary of nodes and indices
     while S > 3:
         ## 1.a Compute N
-        N = calculateN(d)
+        N = calculateN(d,nodes)
         ## 1.b Find the min in N
         lowestPair = minimum_entry(N)
 
         ## 2. Add a new node k to the tree T
         ## 3. add edges with weights
-        i = labels[lowestPair[0]]
-        j = labels[lowestPair[1]]
+        i = lowestPair[0]
+        j = lowestPair[1]
         newEdges = getNewEdges(i,j,d)
-        nodes[(i,j)] = newEdges
-        print("Merging: ({}:{},{}:{})".format(i, newEdges[0], j, newEdges[1]))
-        T.append("({}:{},{}:{})".format(i, newEdges[0], j, newEdges[1])+",")
+        #nodes[(i,j)] = newEdges
+        
+        node_a = list(nodes.keys())[i]
+        node_b = list(nodes.keys())[j]
         ## 4. Update the ds matrix by deleting rows and columns corresponding
         ## to i and j and adding a new row and column for the new taxon k
-        d = updateDistanceMatrix(i,j,d,list(nodes.values()))
-       
-        S-=1
+        d,nodes,new_node = updateDistanceMatrix(node_a,node_b,d,nodes)
         
-        return T
+        ## save Newick format
+        print("Merging: ({}:{},{}:{})".format(node_a, newEdges[0], node_b, newEdges[1]))
+        T[new_node] = f"({node_a}:{newEdges[0]},{node_b}:{newEdges[1]})"
+        
+        #T.append("({}:{},{}:{})".format(node_a, newEdges[0], node_b, newEdges[1]))
+        test = 1
+        
+        S-=1
+    
+    ## termination
+    i, j, m = 0,1,2
+    remaining_nodes = list(nodes.keys())
+    v_i = round(0.5 * (d[i,j] + d[i,m] - d[j,m]),3)
+    v_j = round(0.5 * (d[i,j] + d[j,m] - d[i,m]),3)
+    v_m = round(0.5 * (d[i,m] + d[j,m] - d[i,j]),3)
+    
+    newick = f"({remaining_nodes[i]}:{v_i},{remaining_nodes[j]}:{v_j},{remaining_nodes[m]}:{v_m})"+';'
+    
+    for clade, newick_format in T.items():
+        newick = newick.replace(clade,newick_format)
+    
+    
+    return newick
+    
+
+
+def NJ(phy_file, outputfile = None):
+    D, _ = parse_matrix_and_gap(phy_file)
+    D, nodes = getValues(D)
+    tree = NeighbourJoining(D,nodes)
+    
+    with open(outputfile, "w") as f:
+        f.write(tree)
     
 
 if __name__ == "__main__":
     D, _ = parse_matrix_and_gap("P5/example_slide4.phy")
-    NeighbourJoining(D)
+    D, nodes = getValues(D)
+    tree = NeighbourJoining(D,nodes)
+
