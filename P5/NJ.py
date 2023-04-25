@@ -45,7 +45,7 @@ def updateDistanceMatrix(a,b,m,keys):
     updated_nodes = {k: i for i, k in enumerate(sorted(updated_nodes.keys(), key=lambda x: updated_nodes[x]))}
     
     
-    size_nd = len(m)-1
+    size_nd = len(m)-1 ## in a search tree, it will take log n to update
     nd = np.zeros((size_nd,size_nd))
     ## update distance matrix for the nodes that are not involved in the merging operation, keep the distances
     for node, upd_index in updated_nodes.items():
