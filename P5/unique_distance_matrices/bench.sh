@@ -7,9 +7,7 @@ rapidnj_path="/home/nonatorruella/miniconda3/bin/rapidnj"
 echo "file,QuickTreeNJ,RapidNJ" > execution_times.csv
 
 for file in *.phy; do
-    #quicktree_output="${file}.quicktree"
-    rapidnj_output="${file}.rapidnj"
-
+   
     # Run QuickTree and record the execution time
     quicktree_output="${file}.quicktree"
     quicktree_start_time=$(date +%s.%N)
@@ -21,6 +19,7 @@ for file in *.phy; do
 
 
     # Run RapidNJ and record the execution time
+    rapidnj_output="${file}.rapidnj"
     rapidnj_start_time=$(date +%s.%N)
     "${rapidnj_path}" "${file}" > "${rapidnj_output}"
     rapidnj_end_time=$(date +%s.%N)
