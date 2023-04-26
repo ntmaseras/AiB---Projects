@@ -119,10 +119,7 @@ def NeighbourJoining(d,nodes):
 def NJ(phy_file, outputfile = None):
     
     D, nodes = parse_phy_file(phy_file)
-  
     tree = NeighbourJoining(D,nodes)
-    
-
     with open(outputfile, "w") as f:
         f.write(tree)
         
