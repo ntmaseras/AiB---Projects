@@ -45,9 +45,9 @@ def updateDistanceMatrix(a,b,m,keys):
     updated_nodes = {k: i for i, k in enumerate(sorted(updated_nodes.keys(), key=lambda x: updated_nodes[x]))}
     
     
-    size_nd = len(m)-1 ## in a search tree, it will take log n to update
+    size_nd = len(m)-1 
     nd = np.zeros((size_nd,size_nd))
-    ## update distance matrix for the nodes that are not involved in the merging operation, keep the distances
+    ## update distance matrix for the nodes that are not involved in the merging operation   , keep the distances
     for node, upd_index in updated_nodes.items():
         index_in_m = keys.get(node)
         for node_ , upd_index_ in updated_nodes.items():
@@ -60,7 +60,7 @@ def updateDistanceMatrix(a,b,m,keys):
     ## compute the distance from all the nodes to the merged node
     for node, upd_index in updated_nodes.items():
         # get the index in the original distance matrix 
-        index_in_m = keys.get(node)
+        index_in_m = keys.get(node) ## worse case it can take O(n), but its avg perf is O(1)
         # if the node exists in the matrix (it is not the merged node), get the distance
         if index_in_m is not None:
             nd[-1][upd_index] = (m[i][index_in_m] + m[j][index_in_m] - m[i][j]) / 2.
@@ -120,6 +120,7 @@ def NJ(phy_file, outputfile = None):
     
     D, nodes = parse_phy_file(phy_file)
     tree = NeighbourJoining(D,nodes)
+
     with open(outputfile, "w") as f:
         f.write(tree)
         
