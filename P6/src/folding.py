@@ -80,16 +80,18 @@ def fold_protein(d,p,n):
     diff = 0
     res = "f"*(n-1)
     print(d)
+    keys = list(d.keys())
+    it = -1
     for key in d:
         diff = key - diff
-        print(diff, key)
-        if diff > 3:
+        print(diff, key,it)
+        if diff > 2:
             ## construct the little house
-            t=(diff//2)-1
+            t = (diff//2)-1
             casa = "l" + "f"*t + 2*"r" + "f"*t + "l"
-            npos = key + len(casa)-1
-            res= res[:key] + casa + res[npos:]
-            print(res)
+            npos = keys[it] + len(casa)-1
+            res= res[:keys[it]] + casa + res[npos:]
+        it += 1
     print(p)
     res = res[:p] + 2 * "r" + res[p+2:]
     return res
