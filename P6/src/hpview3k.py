@@ -174,6 +174,8 @@ class HPFold:
             print("Score: %d" % (score))
         else:
             print("Illegal fold after %d steps" % (self.legal_fold[1]))
+            
+        return score
 
 #####################################################################
 # Functions
@@ -255,3 +257,33 @@ if __name__ == "__main__":
         sys.exit(1)
 
     seq.PrintFold()
+    
+
+def try_test(hp_string,fold):
+    seq = HPFold(hp_string)
+
+    if len(seq) != len(hp_string):
+        print()
+        print("The sequence %s contains illegal characters." % (hp_string))
+        print_usage()
+        sys.exit(1)
+        
+    absfold = make_absfold(fold)
+    relfold = make_relfold(fold)
+
+    if len(absfold) != len(fold) and len(relfold) != len(fold):
+        print()
+        print("The folding %s contains illegal characters." % (fold))
+        sys.exit(1)
+        
+    if len(absfold) == len(seq) - 1:
+        seq.SetAbsFold(absfold)
+    elif len(relfold) == len(seq) - 1:
+        seq.SetRelFold(relfold)
+    else:
+        print()
+        print("The folding %s has wrong length." % (fold))
+        print_usage()
+        sys.exit(1)
+    return seq.PrintFold()
+
