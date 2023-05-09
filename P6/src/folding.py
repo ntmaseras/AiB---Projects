@@ -39,8 +39,7 @@ def initialize_protein(hp_string):
         if abs(even-odd) < min_size:
             min_size = abs(even-odd)
             i,j = even,odd
-    
-    evens_b = True
+
     ## get the max 
     if len(matching_evens) > len(matching_odds):
         matching = matching_evens
@@ -51,30 +50,16 @@ def initialize_protein(hp_string):
         matching = matching_odds
         evens = list(matching_odds.values())
         odds = list(matching_odds.keys())
-        evens_b = False
         
     p = (i+j) // 2
     
     
     return dict(sorted(matching.items())),evens, odds, p
 
-
-
-
-def fold_protein(evens, odds, p, n):
-    
-    """
-    Implements the 1/4 approximation algorithm for folding a protein chain in a given
-    number of iterations.
-    """
-    
-    fold = (n-1) * ['F']
-    fold[p] = 'r'
-    fold[p+1] = 'r'
-    ## ALL PROBLEMS ARE AROUND P
-    for i in range(0, len(evens) - 1):
-        current =  evens[i]
-        next = evens[i + 1]
+def build_path(l,fold,p):
+    for i in range(0, len(l) - 1):
+        current =  l[i]
+        next = l[i + 1]
         diff = next - current
         if diff > 3:   
             fold[current] = 'L'
@@ -85,7 +70,8 @@ def fold_protein(evens, odds, p, n):
             if current < p < next:
                 ## if # of bases before the split is > 3, build the house
                 if (p - current) >= 3: 
-                    fold[next - 1] = 'F'
+                    pass
+                    ##fold[next - 1] = 'F'
                 elif (p - current) < 3:
                     fold[current] = 'f'
                     fold[p] = 'r'
@@ -96,35 +82,24 @@ def fold_protein(evens, odds, p, n):
                 fold[current] = 'F'
                 fold[current+1] = 'F'
                 fold[next - 1] = 'F'
-                    
+    return fold
 
-    for i in range(0, len(odds) - 1):
-        current =  odds[i]
-        next = odds[i + 1]
-        diff = next - current
-        print(''.join(fold))
-        if diff > 3:    
-            fold[current] = 'L'
-            roof = int(current + diff // 2)
-            fold[roof - 1] =  'R'
-            fold[roof] =  'R'
-            fold[next - 1] = 'L'
-            if current < p < next:
-                ## if # of bases before the split is > 3, build the house
-                if (p - current) >= 3: 
-                    fold[next - 1] = 'F'
-                elif (p - current) < 3:
-                    fold[current] = 'f'
-                    fold[p] = 'r'
-                    fold[p+1] = 'f'
-                elif current == p + 1:
-                    fold[current] = 'F'
-            if current == p:
-                fold[current] = 'F'
-                fold[current+1] = 'F'
-                fold[next - 1] = 'F'
 
-    return ''.join(fold)
+def fold_protein(evens, odds, p, n):
+    
+    """
+    Implements the 1/4 approximation algorithm for folding a protein chain in a given
+    number of iterations.
+    """
+    
+    fold = (n-1) * ['F']
+    ## set the turn 
+    fold[p] = 'r'
+    fold[p+1] = 'r'
+    ## ALL PROBLEMS ARE AROUND P
+    fold = build_path(evens,fold,p)
+    fold = build_path(odds,fold,p)
+    return ''.join(fold).lower()
 
 
 
@@ -159,14 +134,8 @@ def main():
         results.loc[id,'opt_score'] = score 
         results.loc[id,'aprox_score'] = -len(matching)
         score, illegal = seq.PrintFold()
-        results.loc[id,'capi'] = -score
-        #results.loc[id,'1/4 opt'] = 0.25*score 
-
-    
+        results.loc[id,'capi'] = -score    
         results.loc[id,'Illegal?'] = illegal
-
-    
-    results.to_excel('results.xlsx')
 
      
 if __name__ == "__main__":
