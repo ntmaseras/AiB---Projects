@@ -1,39 +1,8 @@
 import random
 import numpy as np
 from hpview3k import *
+import pandas as pd
 
-
-def initialize_protein_old(hp_string):
-    left = {}
-    right = {}
-    mid = len(hp_string) // 2
-    
-    for pos, char in enumerate(hp_string):
-        mod_pos = pos % 9
-        if char == 'h':
-            if mod_pos % 2 == 0 and pos < mid:
-                left[mod_pos] = (pos, char)
-            elif mod_pos % 2 == 1 and pos < mid:
-                left[mod_pos] = (pos, char)
-            elif mod_pos % 2 == 0 and pos >= mid:
-                right[mod_pos] = (pos, char)
-            elif mod_pos % 2 == 1 and pos >= mid:
-                right[mod_pos] = (pos, char)
-    
-    
-    max_size = 0
-    max_matching = ()
-    
-    for pos, left_tuple in left.items():
-        if pos in right:
-            right_tuple = right[pos]
-            if left_tuple[1] == right_tuple[1]:
-                matching_size = abs(left_tuple[0] - right_tuple[0]) + 1
-                if matching_size > max_size:
-                    max_size = matching_size
-                    max_matching = (left_tuple[1], left_tuple[0], right_tuple[1], right_tuple[0])
-    
-    return max_matching
 
 def initialize_protein(hp_string):
     odds = []
@@ -46,19 +15,20 @@ def initialize_protein(hp_string):
             else:
                 odds.append(pos)
     
-    #print(even,odd)
+
+    ## get the evens vs odds
     min_size = np.inf
     matching_evens = {}
     i_even,j_even = 0,0
     for even,odd in zip(evens,reversed(odds)):
         matching_evens[even] = odd
-        
             
         if abs(even-odd) < min_size:
             min_size = abs(even-odd)
             i_even,j_even = even,odd
     
-        
+    
+    ## get the odds vs evens
     min_size = np.inf
     i,j = 0,0
     matching_odds = {}
@@ -70,92 +40,129 @@ def initialize_protein(hp_string):
             min_size = abs(even-odd)
             i,j = even,odd
     
+    evens_b = True
+    ## get the max 
     if len(matching_evens) > len(matching_odds):
         matching = matching_evens
+        evens = list(matching_evens.keys())
+        odds = list(matching_evens.values())
         i,j = i_even, j_even
     else:
         matching = matching_odds
+        evens = list(matching_odds.values())
+        odds = list(matching_odds.keys())
+        evens_b = False
         
     p = (i+j) // 2
     
-    return dict(sorted(matching.items())),p
+    
+    return dict(sorted(matching.items())),evens, odds, p
 
 
 
 
-def fold_protein(d,p,n):
+def fold_protein(evens, odds, p, n):
     
     """
     Implements the 1/4 approximation algorithm for folding a protein chain in a given
     number of iterations.
     """
     
-    res = "f"*(n-1)
-    #print(d)
-    keys = list(d.keys())
-    #values = list(reversed(sorted(list(d.values()))))
-    it = -1
-    res = res[:p] + 2 * "R" + res[p+2:]
-    prev_key = keys[0]
-    print(res)
-    ## build s1
-    for key in d:
-        
-        diff = abs(key - prev_key)
-        prev_key = key
-        #print(key,diff,it)
-        if diff > 2:
-            ## construct the little house
-            t = (diff//2)-1
-            casa = "l" + "f"*t + 2*"r" + "f"*t + "l"
-            npos = keys[it] + len(casa)-1
-            res= res[:keys[it]] + casa + res[npos+1:]
-        it += 1
-
-    print(res)
-
-
+    fold = (n-1) * ['F']
+    fold[p] = 'r'
+    fold[p+1] = 'r'
     
-    print('--------------------')
-    print(res)
-    print(len(res))
+    for i in range(0, len(evens) - 1):
+        current =  evens[i]
+        next = evens[i + 1]
+        diff = next - current
+        if diff > 3:   
+            fold[current] = 'L'
+            roof = int(current + diff // 2)
+            fold[roof - 1] =  'R'
+            fold[roof] =  'R'
+            fold[next - 1] = 'L'
+            if current < p < next:
+                ## if # of bases before the split is > 3, build the house
+                if (p - current) >= 3: 
+                    fold[next - 1] = 'F'
+                elif (p - current) < 3:
+                    fold[current] = 'f'
+                    fold[p] = 'r'
+                    fold[p+1] = 'f'
+                elif current == p + 1:
+                    fold[current] = 'F'
 
-    return res
+            
+            
 
 
-def path(hp_string):
-    matching, p = initialize_protein(hp_string.lower())
-    folded = fold_protein(matching, p, len(hp_string))
-    
-    score = try_test(hp_string,folded)
-    seq = HPFold(hp_string.lower())
-    path = "".join(path)
-    print(path)
-    seq.SetRelFold(make_relfold(path))
-    seq.PrintFold()
-    return score
+    for i in range(0, len(odds) - 1):
+        current =  odds[i]
+        next = odds[i + 1]
+        diff = next - current
 
+        if diff > 3:       
+            fold[current] = 'L'
+            roof = int(current + diff // 2)
+            fold[roof - 1] =  'R'
+            fold[roof] =  'R'
+            fold[next - 1] = 'L'
+            if current < p < next:
+                ## if # of bases before the split is > 3, build the house
+                if (p - current) >= 3: 
+                    fold[next - 1] = 'F'
+                elif (p - current) < 3:
+                    fold[current] = 'f'
+                    fold[p] = 'r'
+                    fold[p+1] = 'f'
+                elif current == p + 1:
+                    fold[current] = 'F'
+                #elif p == next - 1:
+            
 
+    return ''.join(fold)
 
 
 
 def main():
-    # Example usage:
-    ## this one is OK
-    hp_string = "ppphhpphhhhpphhhphhphhphhhhpppppppphhhhhhpphhhhhhppppppppphphhphhhhhhhhhhhpphhhphhphpphphhhpppppphhh"
-    print(len(hp_string))
-    ## this one is NOT OK 
-    #hp_string = "hphhhhhh"
-    #print(hp_string)
-    matching, p = initialize_protein(hp_string.lower())
-    folded = fold_protein(matching, p, len(hp_string))
 
+    filename = 'P6/src/sequences.txt'
+    sequences = {}
+    with open(filename, "r") as f:
+        for i, line in enumerate(f.readlines()):
+            seq = line.split(' ')[0]
+            score = int(line.split(' ')[1].replace('\n',''))
+            sequences[i] = [seq,score]
+    
+    results = pd.DataFrame()
+    for id, [seq,score] in sequences.items():
+       
+        matching,evens, odds, p = initialize_protein(seq.lower())
+        print(matching)
+        print(len(seq))
+        fold = fold_protein(evens, odds, p, len(seq)) 
+        print(id ,fold, p)
+        
+        results.loc[id,'seq'] = seq 
+        seq = HPFold(seq)
+        absfold = make_absfold(fold)
+        relfold = make_relfold(fold)
+        if len(absfold) == len(seq) - 1:
+            seq.SetAbsFold(absfold)
+        elif len(relfold) == len(seq) - 1:
+            seq.SetRelFold(relfold)
+        
+        results.loc[id,'opt_score'] = score 
+        results.loc[id,'1/4 opt'] = 0.25*score 
+        results.loc[id,'capi '] = -seq.PrintFold()
+        
+        if 0.25*score >= results.loc[id,'capi '] : 
+            results.loc[id,'correct?'] = True
 
     
-    #score = try_test(hp_string,folded)
+    results.to_excel('results.xlsx')
 
-    
-    #print(folded)
      
 if __name__ == "__main__":
     main()
