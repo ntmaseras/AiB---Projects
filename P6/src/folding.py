@@ -71,7 +71,7 @@ def fold_protein(evens, odds, p, n):
     fold = (n-1) * ['F']
     fold[p] = 'r'
     fold[p+1] = 'r'
-    
+    ## ALL PROBLEMS ARE AROUND P
     for i in range(0, len(evens) - 1):
         current =  evens[i]
         next = evens[i + 1]
@@ -92,10 +92,6 @@ def fold_protein(evens, odds, p, n):
                     fold[p+1] = 'f'
                 elif current == p + 1:
                     fold[current] = 'F'
-
-            
-            
-
 
     for i in range(0, len(odds) - 1):
         current =  odds[i]
@@ -118,6 +114,7 @@ def fold_protein(evens, odds, p, n):
                     fold[p+1] = 'f'
                 elif current == p + 1:
                     fold[current] = 'F'
+
                 #elif p == next - 1:
             
 
@@ -154,11 +151,13 @@ def main():
             seq.SetRelFold(relfold)
         
         results.loc[id,'opt_score'] = score 
-        results.loc[id,'1/4 opt'] = 0.25*score 
-        results.loc[id,'capi '] = -seq.PrintFold()
-        
-        if 0.25*score >= results.loc[id,'capi '] : 
-            results.loc[id,'correct?'] = True
+        results.loc[id,'aprox_score'] = -len(matching)
+        score, illegal = seq.PrintFold()
+        results.loc[id,'capi'] = -score
+        #results.loc[id,'1/4 opt'] = 0.25*score 
+
+    
+        results.loc[id,'Illegal?'] = illegal
 
     
     results.to_excel('results.xlsx')

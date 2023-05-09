@@ -129,6 +129,7 @@ class HPFold:
         Print fold and output its score
         """
         score = 0
+        is_ilegal = False
         print()
         for i in range(self.min_i, self.max_i+1):
             for j in range(self.min_j, self.max_j+1):
@@ -174,8 +175,8 @@ class HPFold:
             print("Score: %d" % (score))
         else:
             print("Illegal fold after %d steps" % (self.legal_fold[1]))
-            
-        return score
+            is_ilegal = True
+        return score,is_ilegal
 
 #####################################################################
 # Functions
