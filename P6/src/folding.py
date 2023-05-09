@@ -92,13 +92,18 @@ def fold_protein(evens, odds, p, n):
                     fold[p+1] = 'f'
                 elif current == p + 1:
                     fold[current] = 'F'
+            if current == p:
+                fold[current] = 'F'
+                fold[current+1] = 'F'
+                fold[next - 1] = 'F'
+                    
 
     for i in range(0, len(odds) - 1):
         current =  odds[i]
         next = odds[i + 1]
         diff = next - current
-
-        if diff > 3:       
+        print(''.join(fold))
+        if diff > 3:    
             fold[current] = 'L'
             roof = int(current + diff // 2)
             fold[roof - 1] =  'R'
@@ -114,9 +119,10 @@ def fold_protein(evens, odds, p, n):
                     fold[p+1] = 'f'
                 elif current == p + 1:
                     fold[current] = 'F'
-
-                #elif p == next - 1:
-            
+            if current == p:
+                fold[current] = 'F'
+                fold[current+1] = 'F'
+                fold[next - 1] = 'F'
 
     return ''.join(fold)
 
