@@ -63,36 +63,43 @@ def build_path(l,fold,p):
         diff = next - current
         if diff > 3:   
             fold[current] = 'L'
-            roof = int(current + diff // 2)
+            roof = current + diff // 2
             fold[roof - 1] =  'R'
             fold[roof] =  'R'
             fold[next - 1] = 'L'
-            if current < p < next:
-                ## if # of bases before the split is > 3, build the house
-                if (p - current) >= 3: 
-                    pass
-                    ##fold[next - 1] = 'F'
-                elif (p - current) < 3:
-                    fold[current] = 'f'
-                    fold[p] = 'r'
-                    fold[p+1] = 'f'
-                elif current == p + 1:
-                    fold[current] = 'F'
-            if current == p:
-                fold[current] = 'F'
-                fold[current+1] = 'F'
-                fold[next - 1] = 'F'
+            # if current < p < next:
+            #     ## if # of bases before the split is > 3, build the house
+            #     if (p - current) >= 3: 
+            #         pass
+            #     elif (p - current) < 3:
+            #         fold[current] = 'f'
+            #         fold[p] = 'r'
+            #         fold[p+1] = 'f'
+            #     elif current == p + 1:
+            #         fold[current] = 'F'
+        if current == p + 1:
+            fold[current] = 'F'
     return fold
 
 
-def fold_protein(evens, odds, p, n):
+def fold_protein(matching,evens, odds, p, n):
     
     """
     Implements the 1/4 approximation algorithm for folding a protein chain in a given
     number of iterations.
     """
+    first_key = list(matching.keys())
+    if first_key[0] % 2 == 0:
+        evens = [e for e in evens if  e < p]
+        odds = [o for o in odds if o > p]
+    else:
+        evens = [e for e in evens if  e > p]
+        odds = [o for o in odds if o < p]
+        
     
     fold = (n-1) * ['F']
+    
+    
     ## set the turn 
     fold[p] = 'r'
     fold[p+1] = 'r'
@@ -117,11 +124,7 @@ def main():
     for id, [seq,score] in sequences.items():
        
         matching,evens, odds, p = initialize_protein(seq.lower())
-        print(matching)
-        print(len(seq))
-        fold = fold_protein(evens, odds, p, len(seq)) 
-        print(id ,fold, p)
-        
+        fold = fold_protein(matching,evens, odds, p, len(seq))         
         results.loc[id,'seq'] = seq 
         seq = HPFold(seq)
         absfold = make_absfold(fold)
